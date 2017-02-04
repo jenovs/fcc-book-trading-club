@@ -7,15 +7,19 @@ const path = require('path');
 const fetch = require('node-fetch');
 // const passport = require('passport');
 // const session = require('express-session');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+const Book = require('./models/book');
+const User = require('./models/user');
+
 const {
-  PORT,
+  MONGODB_URI,
+  PORT
 } = process.env;
 
-// mongoose.Promise = global.Promise;
-// mongoose.connect(MONGODB_URI);
+mongoose.Promise = global.Promise;
+mongoose.connect(MONGODB_URI);
 
 const app = express();
 app.use(bodyParser.json());
@@ -53,6 +57,39 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   res.redirect('/')
 // });
 
+app.get('/books', (req, res) => {
+  Book.find({})
+    .then(data => res.send(data))
+    .catch(e => console.log(e));
+});
+
+app.post('/books', (req, res) => {
+  User.findOne({username: 'admin'})
+    .then(user => {
+      console.log(user);
+      const newBook = new Book({
+        title: req.body.title,
+        author: req.body.author,
+      });
+      newBook.owner = user;
+      return newBook.save()
+    })
+    .then(data => res.send(data))
+    .catch(e => console.log(e.message));
+});
+
+// Temp route to create test user
+app.post('/user', (req, res) => {
+  const newUser = new User({
+    username: 'admin'
+  });
+  newUser.save()
+    .then(data => res.send(data))
+    .catch(e => {
+      console.log(e.message);
+      res.status(400).send()
+    })
+})
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -60,3 +97,5 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}...`);
 });
+
+module.exports = {app};

@@ -5,4 +5,5 @@ public/js/bundle.js
 config/config.json
 
 ecosystem.config.js
+notes.md
 npm-debug.log
