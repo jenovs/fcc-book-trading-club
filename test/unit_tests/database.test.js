@@ -1,29 +1,39 @@
 require('./../../config/config');
 
 const expect = require('chai').expect;
-const mongoose = require('mongoose');
+const mongoose = require('./../../mongoose');
 const User = require('./../../models/user');
 const Book = require('./../../models/book');
 
-const {
-  MONGODB_URI,
-  PORT
-} = process.env;
+// const {
+//   MONGODB_URI,
+//   PORT
+// } = process.env;
 
-mongoose.Promise = global.Promise;
-mongoose.connect(MONGODB_URI);
+
 
 const user = new User({
   username: 'admin'
 });
 
 before(done => {
-  const { users } = mongoose.connection.collections;
-  users.drop(() => {
-    user.save()
-      .then(() => done())
-  })
+  // mongoose.Promise = global.Promise;
+  // mongoose.connect(MONGODB_URI, () => {
+    // console.log('connected');
+    const { users } = mongoose.connection.collections;
+    users.drop(() => {
+      user.save()
+        .then(() => done())
+    });
+  // });
 });
+
+// after(done => {
+//   mongoose.disconnect(() => {
+//     console.log('disconnected');
+//     done();
+//   });
+// });
 
 beforeEach((done) => {
   const { books } = mongoose.connection.collections;

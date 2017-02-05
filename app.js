@@ -7,19 +7,15 @@ const path = require('path');
 const fetch = require('node-fetch');
 // const passport = require('passport');
 // const session = require('express-session');
-const mongoose = require('mongoose');
+const mongoose = require('./mongoose');
 const bodyParser = require('body-parser');
 
 const Book = require('./models/book');
 const User = require('./models/user');
 
 const {
-  MONGODB_URI,
   PORT
 } = process.env;
-
-mongoose.Promise = global.Promise;
-mongoose.connect(MONGODB_URI);
 
 const app = express();
 app.use(bodyParser.json());
