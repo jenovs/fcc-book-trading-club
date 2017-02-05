@@ -32,14 +32,19 @@ beforeEach((done) => {
   })
 });
 
+
+
 describe('Adding a book', () => {
-  const book = new Book({
-    title: 'A new book',
-    author: 'John Doe'
-  })
-  book.owner = user;
+
+  // book.owner = user;
 
   it('Should add a book', (done) => {
+    const book = new Book({
+      title: 'A new book',
+      author: 'John Doe'
+    })
+    book.owner = user;
+
     book.save()
     .then(() => {
       Book.find({title: book.title})
@@ -56,20 +61,26 @@ describe('Adding a book', () => {
   });
 
   it('Should link a book to the user', (done) => {
-    user.books.push(book);
-    book.save()
-    .then(() => {
-      return user.save()
-    })
-    .then(() => {
-      return User.findOne({username: user.username})
-    })
-    .then(user => {
-      expect(user.books.length).to.be.equal(1);
-      expect(user.books[0]).to.be.eql(book._id);
-      done();
-    })
-    .catch(e => done(e))
-  })
 
+    const book = new Book({
+      title: 'A new book',
+      author: 'John Doe'
+    })
+
+    book.owner = user;
+    user.books.push(book);
+
+    Promise.all([book.save(), user.save()])
+      .then(() => User.findOne({username: user.username}).populate('books'))
+      .then(user => {
+        // console.log(user);
+        expect(user.books.length).to.be.equal(1);
+        expect(user.books[0]._id).to.be.eql(book._id);
+        expect(user.books[0].title).to.be.equal(book.title);
+        done();
+      })
+      .catch(e => done(e))
+    // })
+    // .catch(e => done(e));
+  });
 });
