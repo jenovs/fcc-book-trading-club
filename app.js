@@ -54,7 +54,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.get('/books', (req, res) => {
+  // console.log('getting books');
   Book.find({})
+    .populate('owner')
     .then(data => res.send(data))
     .catch(e => console.log(e));
 });

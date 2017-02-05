@@ -1,96 +1,52 @@
-require('./../../config/config');
-
 const expect = require('chai').expect;
 const mongoose = require('./../../mongoose');
 const User = require('./../../models/user');
 const Book = require('./../../models/book');
 
-// const {
-//   MONGODB_URI,
-//   PORT
-// } = process.env;
-
-
-
-const user = new User({
-  username: 'admin'
-});
-
-before(done => {
-  // mongoose.Promise = global.Promise;
-  // mongoose.connect(MONGODB_URI, () => {
-    // console.log('connected');
-    const { users } = mongoose.connection.collections;
-    users.drop(() => {
-      user.save()
-        .then(() => done())
-    });
-  // });
-});
-
-// after(done => {
-//   mongoose.disconnect(() => {
-//     console.log('disconnected');
-//     done();
-//   });
-// });
-
-beforeEach((done) => {
-  const { books } = mongoose.connection.collections;
-  books.drop(() => {
-    done()
-  })
-});
-
-
-
 describe('Adding a book', () => {
 
-  // book.owner = user;
+  const users = [{username: 'Bob'}]
+  const userOne = new User(users[0]);
 
-  it('Should add a book', (done) => {
-    const book = new Book({
-      title: 'A new book',
-      author: 'John Doe'
-    })
-    book.owner = user;
-
-    book.save()
-    .then(() => {
-      Book.find({title: book.title})
-      .then(data => {
-        expect(data.length).to.be.equal(1);
-        expect(data[0].title).to.be.equal(book.title);
-        expect(data[0].author).to.be.equal(book.author);
-        expect(data[0].owner).to.eql(user._id);
-        done();
-      })
-      .catch(e => done(e));
-    })
-    .catch(e => done(e));
+  beforeEach((done) => {
+    const { books, users } = mongoose.connection.collections;
+    users.drop(() => {
+      books.drop(() => {
+        userOne.save().then(() => done());
+      });
+    });
   });
 
-  it('Should link a book to the user', (done) => {
+  it('Should add a book and link it to user', (done) => {
 
     const book = new Book({
       title: 'A new book',
       author: 'John Doe'
+    });
+
+    book.owner = userOne;
+
+    Promise.all([
+      book.save(),
+      User.findByIdAndUpdate(userOne._id, {$push: {books: book._id}})
+    ])
+    .then(() => {
+      return Book.find({title: book.title}).populate('owner')
     })
-
-    book.owner = user;
-    user.books.push(book);
-
-    Promise.all([book.save(), user.save()])
-      .then(() => User.findOne({username: user.username}).populate('books'))
-      .then(user => {
-        // console.log(user);
-        expect(user.books.length).to.be.equal(1);
-        expect(user.books[0]._id).to.be.eql(book._id);
-        expect(user.books[0].title).to.be.equal(book.title);
-        done();
-      })
-      .catch(e => done(e))
-    // })
-    // .catch(e => done(e));
+    .then(data => {
+      expect(data.length).to.be.equal(1);
+      expect(data[0].title).to.be.equal(book.title);
+      expect(data[0].author).to.be.equal(book.author);
+      expect(data[0].owner.username).to.equal(userOne.username);
+      expect(data[0].owner._id).to.eql(userOne._id);
+    })
+    .then(() => {
+      return User.findById(userOne._id).populate('books')
+    })
+    .then(data => {
+      expect(data.books.length).to.be.equal(1);
+      done();
+    })
+    .catch(e => done(e));
   });
 });
