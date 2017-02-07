@@ -5,7 +5,7 @@ module.exports = {
   entry: [
     // fetch polyfill to support iOS
     'whatwg-fetch',
-    path.join(__dirname, 'app', 'client.js')
+    path.join(__dirname, 'client', 'client.js')
   ],
 
   output: {
