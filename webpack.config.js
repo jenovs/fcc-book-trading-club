@@ -5,7 +5,7 @@ module.exports = {
   entry: [
     // fetch polyfill to support iOS
     'whatwg-fetch',
-    path.join(__dirname, 'src', 'app.js')
+    path.join(__dirname, 'app', 'client.js')
   ],
 
   output: {
@@ -13,12 +13,19 @@ module.exports = {
     filename: 'bundle.js'
   },
 
+  externals: {
+    'cheerio': 'window',
+    'react/lib/ExecutionEnvironment': true,
+    'react/lib/ReactContext': true
+  },
+
   module: {
     loaders: [{
       test: /\.js$/,
       loader: 'babel-loader',
+      exclude: 'node_modules',
       query: {
-        presets: ['es2015', 'react']
+        presets: ['airbnb', 'es2015', 'react']
       }
     }]
   },

@@ -2,7 +2,7 @@ node_modules
 playground
 
 public/js/bundle.js
-config/config.json
+app/config/config.json
 
 ecosystem.config.js
 notes.md
