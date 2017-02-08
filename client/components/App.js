@@ -10,6 +10,8 @@ export default class App extends React.Component {
       books: [],
       user: null
     }
+
+    this.addBook = this.addBook.bind(this);
   }
 
   componentWillMount() {
@@ -25,6 +27,30 @@ export default class App extends React.Component {
       })
   }
 
+  addBook(author, title) {
+    if (author && title) {
+      const newBook = {
+        author,
+        title
+      }
+
+      fetch(`/books`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(newBook)
+      })
+      .then(res => res.json())
+      .then(json => {
+        const updatedBooks = [...this.state.books, json];
+        this.setState({
+          books: updatedBooks
+        })
+      })
+    }
+  }
+
   getCurrentUser() {
     fetch('/users')
       .then(res => res.json())
@@ -36,7 +62,9 @@ export default class App extends React.Component {
 
   render() {
     const props = {
-      books: this.state.books
+      books: this.state.books,
+      user: this.state.user,
+      addBook: this.addBook
     };
     const childrenWithProps = React.Children.map(this.props.children, (child) => React.cloneElement(child, props));
     return (

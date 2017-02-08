@@ -1,0 +1,10 @@
+.profile__form-add {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 30rem;
+
+  & > fieldset {
+    border-color: cornflowerblue;
+    border-radius: 5px;
+  }
+}

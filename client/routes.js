@@ -14,7 +14,5 @@ module.exports = (
     <Route path='/about' component={About} />
     <Route path='/profile' component={Profile}/>
     <Route path='*' component={NotFound404} />
-    {/* <Route path='*' component={Home} browserHistory=.pop()/> */}
-    {/* <Redirect from='*' to='/' /> */}
   </Route>
 );

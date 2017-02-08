@@ -14,12 +14,18 @@ router.use((req, res, next) => {
   next();
 });
 
+// Mock the loggded in user 'userTwo'.
+router.use((req, res, next) => {
+  req.user = 'userTwo';
+  next();
+});
+
 router.get('/', checkAuth, getUser)
 
 // Temp route to create test user
 router.post('/', (req, res) => {
   const newUser = new User({
-    username: 'userOne'
+    username: 'userTwo'
   });
   newUser.save()
     .then(data => res.send(data))
