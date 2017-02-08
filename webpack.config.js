@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -9,8 +10,8 @@ module.exports = {
   ],
 
   output: {
-    path: path.join(__dirname, 'public', 'js'),
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'app', 'public'),
+    filename: 'js/bundle.js'
   },
 
   externals: {
@@ -27,6 +28,12 @@ module.exports = {
       query: {
         presets: ['airbnb', 'es2015', 'react']
       }
+    }, {
+      test: /\.scss$/,
+      loader: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader!sass-loader'
+      })
     }]
   },
 
@@ -34,6 +41,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       // fetch polyfill to support iOS
       'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-    })
+    }),
+    new ExtractTextPlugin('styles/main.css')
   ]
 };

@@ -1,16 +1,17 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: [
     // fetch polyfill to support iOS
     'whatwg-fetch',
-    path.join(__dirname, 'app', 'client.js')
+    path.join(__dirname, 'client', 'client.js')
   ],
 
   output: {
-    path: path.join(__dirname, 'public', 'js'),
-    filename: 'bundle.min.js'
+    path: path.join(__dirname, 'app', 'public'),
+    filename: 'js/bundle.min.js'
   },
 
   module: {
@@ -20,6 +21,12 @@ module.exports = {
       query: {
         presets: ['es2015', 'react']
       }
+    }, {
+      test: /\.scss$/,
+      loader: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader!clean-css-loader!sass-loader'
+      })
     }]
   },
 
@@ -32,5 +39,6 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new webpack.optimize.UglifyJsPlugin(),
+    new ExtractTextPlugin('styles/main.min.css')
   ]
 };
