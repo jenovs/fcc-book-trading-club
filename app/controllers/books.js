@@ -11,13 +11,14 @@ function findBooks(req, res) {
 function addBook(req, res) {
   User.findOne({username: req.user})
     .then(user => {
-      console.log(user);
       const newBook = new Book({
         title: req.body.title,
         author: req.body.author,
       });
       newBook.owner = user;
-      return newBook.save()
+      user.books.push(newBook)
+
+      return Promise.all([newBook.save(), user.save()]);
     })
     .then(data => res.send(data))
     .catch(e => console.log(e.message));

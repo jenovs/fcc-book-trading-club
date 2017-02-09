@@ -8,18 +8,6 @@ const checkAuth = (req, res, next) => {
   next();
 }
 
-// Mock the loggded in user 'userOne'.
-router.use((req, res, next) => {
-  req.user = 'userOne';
-  next();
-});
-
-// Mock the loggded in user 'userTwo'.
-router.use((req, res, next) => {
-  req.user = 'userTwo';
-  next();
-});
-
 router.get('/', checkAuth, getUser)
 
 // Temp route to create test user

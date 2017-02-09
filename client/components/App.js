@@ -43,9 +43,8 @@ export default class App extends React.Component {
       })
       .then(res => res.json())
       .then(json => {
-        const updatedBooks = [...this.state.books, json];
         this.setState({
-          books: updatedBooks
+          books: this.state.books.concat(json)
         })
       })
     }
@@ -55,7 +54,6 @@ export default class App extends React.Component {
     fetch('/users')
       .then(res => res.json())
       .then(json => {
-        // console.log(json.username);
         this.setState({user: json.username})
       })
   }
