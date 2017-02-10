@@ -48,7 +48,7 @@ export default class Profile extends React.Component {
         </div>
         <div>
           <p>My Books</p>
-          <Books books={books}/>
+          <Books books={books} deleteBook={this.props.deleteBook} user={this.props.user}/>
         </div>
       </div>
     )

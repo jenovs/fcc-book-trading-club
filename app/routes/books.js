@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { addBook, findBooks } = require('./../controllers/books');
+const { addBook, deleteBook, findBooks } = require('./../controllers/books');
 
 
 const checkAuth = (req, res, next) => {
@@ -16,5 +16,7 @@ const checkAuth = (req, res, next) => {
 router.get('/', findBooks);
 
 router.post('/', checkAuth, addBook);
+
+router.delete('/:id', checkAuth, deleteBook);
 
 module.exports = router;

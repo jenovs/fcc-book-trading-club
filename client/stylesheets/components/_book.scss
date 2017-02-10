@@ -3,5 +3,30 @@
   height: 10rem;
   margin: 1rem;
   min-width: 7rem;
+  position: relative;
+  transition: all 0.3s;
   width: 7rem;
+}
+
+.book__delete {
+  border: 1px solid transparent;
+  color: red;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: default;
+  padding: 5px;
+  position: absolute;
+  left: 75%;
+  top: 5%;
+  transition: all 0.1s;
+
+  &:hover {
+    transform: scale(1.1);
+    border: 1px solid gray;
+    box-shadow: 1px 1px 2px black;
+  }
+}
+
+.book--hovered {
+  transform: scale(1.2);
 }

@@ -7,7 +7,7 @@ export default class Home extends React.Component {
     // console.log(this.props);
     return (
       <div>
-        <Books books={this.props.books}/>
+        <Books books={this.props.books} />
       </div>
     )
   }

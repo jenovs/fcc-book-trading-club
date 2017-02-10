@@ -24,7 +24,35 @@ function addBook(req, res) {
     .catch(e => console.log(e.message));
 }
 
+function deleteBook(req, res) {
+  console.log('deleteBook', req.params.id);
+  let deletedBook = {};
+  let currentUser = {};
+  User.findOne({username: req.user})
+    .then(user => {
+      currentUser = user;
+      // user._id
+      return Book.findOneAndRemove({_id: req.params.id, owner: currentUser._id})
+    })
+  // Book.findByIdAndRemove(req.params.id)
+
+    .then(book => {
+      console.log(book);
+      deletedBook = book;
+      // return book.owner
+    })
+    // .then(ownerId => User.findById(ownerId))
+    .then(() => {
+      const bookInd = currentUser.books.indexOf(req.params.id);
+      currentUser.books.splice(bookInd, 1);
+      return currentUser.save();
+    })
+    .then(() => res.send(deletedBook))
+    .catch(e => console.log(e));
+}
+
 module.exports = {
   addBook,
+  deleteBook,
   findBooks
 };

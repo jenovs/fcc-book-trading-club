@@ -56,16 +56,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 // Mock the loggded in user 'userOne'.
-// app.use((req, res, next) => {
-//   req.user = 'userOne';
-//   next();
-// });
-
-// Mock the loggded in user 'userTwo'.
 app.use((req, res, next) => {
-  req.user = 'userTwo';
+  req.user = 'userOne';
   next();
 });
+
+// Mock the loggded in user 'userTwo'.
+// app.use((req, res, next) => {
+//   req.user = 'userTwo';
+//   next();
+// });
 
 app.use('/books', books);
 app.use('/users', users);
