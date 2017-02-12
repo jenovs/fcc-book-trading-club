@@ -11,6 +11,10 @@ const UserSchema = new Schema({
   books: [{
     type: Schema.Types.ObjectId,
     ref: 'book'
+  }],
+  requestedBooks: [{
+    type: Schema.Types.ObjectId,
+    ref: 'book'
   }]
 });
 

@@ -51,8 +51,43 @@ function deleteBook(req, res) {
     .catch(e => console.log(e));
 }
 
+function requestBookTrade(req, res) {
+  let updUser;
+  User.findOne({username: req.user})
+    .then(user => {
+      updUser = user;
+      if (~user.requestedBooks.indexOf(req.params.id)) throw Error;
+      user.requestedBooks.push(req.params.id)
+      return Book.findById(req.params.id)
+    })
+    .then(book => {
+      if (!book.requestedBy) {
+        book.requestedBy = updUser._id;
+      }
+      return Promise.all([book.save(), updUser.save()])
+    })
+    .then(data => res.send({success: 'OK'}))
+    .catch(e => {
+      console.log(e);
+      res.status(400).send();
+    });
+}
+
+function cancelBookTrade(req, res) {
+
+}
+
+function confirmBookTrade(req, res) {
+
+}
+
+function rejectBookTrade(req, res) {
+  
+}
+
 module.exports = {
   addBook,
   deleteBook,
-  findBooks
+  findBooks,
+  requestBookTrade
 };
