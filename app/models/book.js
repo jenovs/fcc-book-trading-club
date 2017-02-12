@@ -6,11 +6,12 @@ mongoose.Promise = global.Promise;
 const BookSchema = new Schema({
   title: String,
   author: String,
-  owner: {
+  _owner: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: true
   },
-  requestedBy: {
+  _requestedBy: {
     type: Schema.Types.ObjectId,
     ref: 'user'
   }

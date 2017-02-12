@@ -1,34 +1,68 @@
+const { ObjectID } = require('mongodb');
 const mongoose = require('./../mongoose');
 const Book = require('./../models/book');
 const User = require('./../models/user');
 
+const user0Id = new ObjectID();
+const user1Id = new ObjectID();
+
 const usersList = [
-  {username: 'userOne'}
-]
+  {
+    _id: user0Id,
+    username: 'Jane',
+    books: []
+  }, {
+    _id: user1Id,
+    username: 'John',
+    books: []
+  }
+];
 
 const booksList = [
   {
+    _id: new ObjectID(),
     author: 'Marcel Proust',
-    title: 'In Search of Lost Time'
+    title: 'In Search of Lost Time',
+    _owner: user0Id
   }, {
+    _id: new ObjectID(),
     author: 'James Joyce',
-    title: 'Ulysses'
+    title: 'Ulysses',
+    _owner: user0Id
+  }, {
+    _id: new ObjectID(),
+    author: 'Rollo Tomassi',
+    title: 'The Rational Male',
+    _owner: user1Id
+  }, {
+    _id: new ObjectID(),
+    author: 'David Allen',
+    title: 'Getting Things Done',
+    _owner: user1Id
   }
-]
+];
 
-module.exports = function(done) {
+let c = -1;
+usersList.forEach(user => {
+  user.books.push(booksList[++c]._id, booksList[++c]._id);
+});
+
+function seed(done) {
   const { books, users } = mongoose.connection.collections;
 
   users.drop(() => {
     books.drop(() => {
-      const user = new User(usersList[0]);
-      const book0 = new Book(booksList[0]);
-      book0.owner = user;
-      const book1 = new Book(booksList[1]);
-      book1.owner = user;
-      user.books.push(book0, book1);
-      Promise.all([user.save(), book0.save(), book1.save()])
-      .then(() => done());
+      Promise.all([User.insertMany(usersList), Book.insertMany(booksList)])
+      .then((data) => {
+        done()
+      })
+      .catch(e => console.log(e))
     });
-  })
+  });
+}
+
+module.exports = {
+  seed,
+  usersList,
+  booksList
 }

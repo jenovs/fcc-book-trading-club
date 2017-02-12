@@ -15,6 +15,8 @@ const users = require('./routes/users');
 const Book = require('./models/book');
 const User = require('./models/user');
 
+const { usersList } = require('./seed/seed');
+
 const {
   PORT
 } = process.env;
@@ -55,11 +57,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   res.redirect('/')
 // });
 
-// Mock the loggded in user 'userOne'.
-app.use((req, res, next) => {
-  req.user = 'userOne';
-  next();
-});
+// Temp hack to do testing.
+// Mock the loggded in user.
+if (process.env.NODE_ENV === 'test') {
+  app.use((req, res, next) => {
+    req.user = req.headers['x-test-user'];
+    next();
+  });
+}
 
 // Mock the loggded in user 'userTwo'.
 // app.use((req, res, next) => {
@@ -67,8 +72,8 @@ app.use((req, res, next) => {
 //   next();
 // });
 
-app.use('/books', books);
-app.use('/users', users);
+app.use('/api/books', books);
+app.use('/api/users', users);
 
 
 app.get('*', (req, res) => {

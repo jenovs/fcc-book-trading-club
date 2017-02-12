@@ -2,26 +2,35 @@ const Book = require('./../models/book');
 const User = require('./../models/user');
 
 function findBooks(req, res) {
-  Book.find({})
-  .populate({path: 'owner', select: 'username -_id'})
+  Book.find({}, '-__v')
+  .populate({path: '_owner', select: 'username'})
   .then(data => res.send(data))
   .catch(e => console.log(e));
 }
 
 function addBook(req, res) {
+  // console.log('req.user', req.user);
+  if (!req.user) return res.status(401).send();
+  if (!req.body.title || !req.body.author) return res.status(400).send();
   User.findOne({username: req.user})
     .then(user => {
+      // console.log(user);
       const newBook = new Book({
         title: req.body.title,
         author: req.body.author,
+        _owner: user
       });
-      newBook.owner = user;
+      // newBook._owner = user;
       user.books.push(newBook)
 
       return Promise.all([newBook.save(), user.save()]);
     })
-    .then(data => res.send(data))
-    .catch(e => console.log(e.message));
+    // .then(data => res.status(201).send(data))
+    .then(() => res.status(201).send({message: 'success'}))
+    .catch(e => {
+      console.log(e.message)
+      res.status(400).send();
+    });
 }
 
 function deleteBook(req, res) {
@@ -37,7 +46,7 @@ function deleteBook(req, res) {
   // Book.findByIdAndRemove(req.params.id)
 
     .then(book => {
-      console.log(book);
+      console.log('book', book);
       deletedBook = book;
       // return book.owner
     })
@@ -82,7 +91,7 @@ function confirmBookTrade(req, res) {
 }
 
 function rejectBookTrade(req, res) {
-  
+
 }
 
 module.exports = {
