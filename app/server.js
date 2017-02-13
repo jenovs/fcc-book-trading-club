@@ -11,6 +11,7 @@ const mongoose = require('./mongoose');
 const bodyParser = require('body-parser');
 const books = require('./routes/books');
 const users = require('./routes/users');
+const trades = require('./routes/trades');
 
 const Book = require('./models/book');
 const User = require('./models/user');
@@ -27,7 +28,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use(session({
-//   secret: 'Do you even lift?',
+//   secret: '',
 //   resave: true,
 //   saveUninitialized: true
 // }));
@@ -74,6 +75,7 @@ if (process.env.NODE_ENV === 'test') {
 
 app.use('/api/books', books);
 app.use('/api/users', users);
+app.use('/api/trades', trades);
 
 
 app.get('*', (req, res) => {

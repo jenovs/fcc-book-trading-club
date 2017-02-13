@@ -25,7 +25,7 @@ router.get('/', findBooks);
 
 router.post('/', checkAuth, addBook);
 
-router.put('/:id', checkAuth, requestBookTrade)
+// router.put('/:id', checkAuth, requestBookTrade)
 
 router.delete('/:id', checkAuth, deleteBook);
 

@@ -39,7 +39,7 @@ describe('Test /api/books router', () => {
         expect(d[3].author).toBe(booksList[3].author);
         expect(d[3]._owner._id).toEqual(usersList[1]._id);
         expect(d[3]._owner.username).toBe(usersList[1].username);
-        expect(d[3]._requestedBy).toNotExist();
+        expect(d[3]._requestedBy).toEqual(usersList[0]._id);
       })
       .end(done);
     });
@@ -163,5 +163,4 @@ describe('Test /api/books router', () => {
       .end(done);
     });
   });
-
 });

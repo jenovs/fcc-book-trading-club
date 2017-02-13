@@ -73,18 +73,6 @@ function requestBookTrade(req, res) {
     });
 }
 
-function cancelBookTrade(req, res) {
-
-}
-
-function confirmBookTrade(req, res) {
-
-}
-
-function rejectBookTrade(req, res) {
-
-}
-
 module.exports = {
   addBook,
   deleteBook,

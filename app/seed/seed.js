@@ -6,11 +6,14 @@ const User = require('./../models/user');
 const user0Id = new ObjectID();
 const user1Id = new ObjectID();
 
+const book3Id = new ObjectID();
+
 const usersList = [
   {
     _id: user0Id,
     username: 'Jane',
-    books: []
+    books: [],
+    requestedBooks: [book3Id]
   }, {
     _id: user1Id,
     username: 'John',
@@ -35,10 +38,11 @@ const booksList = [
     title: 'The Rational Male',
     _owner: user1Id
   }, {
-    _id: new ObjectID(),
+    _id: book3Id,
     author: 'David Allen',
     title: 'Getting Things Done',
-    _owner: user1Id
+    _owner: user1Id,
+    _requestedBy: user0Id
   }
 ];
 
