@@ -9,23 +9,19 @@ function findBooks(req, res) {
 }
 
 function addBook(req, res) {
-  // console.log('req.user', req.user);
   if (!req.user) return res.status(401).send();
   if (!req.body.title || !req.body.author) return res.status(400).send();
   User.findOne({username: req.user})
     .then(user => {
-      // console.log(user);
       const newBook = new Book({
         title: req.body.title,
         author: req.body.author,
         _owner: user
       });
-      // newBook._owner = user;
       user.books.push(newBook)
 
       return Promise.all([newBook.save(), user.save()]);
     })
-    // .then(data => res.status(201).send(data))
     .then(() => res.status(201).send({message: 'success'}))
     .catch(e => {
       console.log(e.message)
@@ -34,30 +30,25 @@ function addBook(req, res) {
 }
 
 function deleteBook(req, res) {
-  console.log('deleteBook', req.params.id);
+  if (!req.user) return res.status(401).send();
   let deletedBook = {};
   let currentUser = {};
   User.findOne({username: req.user})
     .then(user => {
       currentUser = user;
-      // user._id
-      return Book.findOneAndRemove({_id: req.params.id, owner: currentUser._id})
+      return Book.findOneAndRemove({_id: req.params.id, _owner: currentUser._id})
     })
-  // Book.findByIdAndRemove(req.params.id)
-
     .then(book => {
-      console.log('book', book);
+      if (!book) throw Error;
       deletedBook = book;
-      // return book.owner
     })
-    // .then(ownerId => User.findById(ownerId))
     .then(() => {
       const bookInd = currentUser.books.indexOf(req.params.id);
       currentUser.books.splice(bookInd, 1);
       return currentUser.save();
     })
     .then(() => res.send(deletedBook))
-    .catch(e => console.log(e));
+    .catch(e => res.status(400).send());
 }
 
 function requestBookTrade(req, res) {

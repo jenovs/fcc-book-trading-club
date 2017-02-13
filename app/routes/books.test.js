@@ -114,4 +114,54 @@ describe('Test /api/books router', () => {
     });
   });
 
+  describe('DELETE /api/books/:id', () => {
+
+    it('Should delete the book', (done) => {
+      app
+      .delete(`/api/books/${booksList[0]._id}`)
+      .set('x-test-user', usersList[0].username)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        Book.find()
+        .then(books => {
+          expect(books.length).toBe(3);
+          expect(books[0]._id).toEqual(booksList[1]._id);
+          return User.findOne({username: usersList[0].username})
+
+        })
+        .then(user => {
+          expect(user.books.length).toBe(1);
+          expect(user.books.indexOf(booksList[0]._id)).toBe(-1);
+          done();
+        })
+        .catch(e => done(e));
+      });
+    });
+
+    it('Should not delete the book if unauthorized', (done) => {
+      app
+      .delete(`/api/books/${booksList[0]._id}`)
+      .expect(401)
+      .end(done);
+    });
+
+    it('Should not delete other\'s book', (done) => {
+      app
+      .delete(`/api/books/${booksList[0]._id}`)
+      .set('x-test-user', usersList[1].username)
+      .expect(400)
+      .end(done);
+    });
+
+    it('Should handle invalid book id', (done) => {
+      app
+      .delete(`/api/books/123456`)
+      .set('x-test-user', usersList[1].username)
+      .expect(400)
+      .end(done);
+    });
+  });
+
 });
