@@ -5,7 +5,7 @@
   "description": "Full stack project for FreeCodeCamp",
   "main": "app/server.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha app/**/*.test.js --reporter min",
+    "test": "NODE_ENV=test mocha app/**/*.test.js -R min",
     "test:react": "NODE_ENV=test mocha helpers/browser.js client/**/*.test.js || true",
     "start": "export NODE_ENV=production && node app/server.js",
     "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js",

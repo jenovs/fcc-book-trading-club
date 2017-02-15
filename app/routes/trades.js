@@ -1,6 +1,10 @@
 const router = require('express').Router();
 
-const { getMyTradeRequests } = require('./../controllers/trades');
+const {
+  getMyTradeRequests,
+  createTradeRequest,
+  deleteTradeRequest
+} = require('./../controllers/trades');
 
 let checkAuth;
 
@@ -17,7 +21,9 @@ if (process.env.NODE_ENV === 'test') {
 
 router.get('/', checkAuth, getMyTradeRequests);
 
-// router.post('/:id', checkAuth, createTradeRequest);
+router.post('/:id', checkAuth, createTradeRequest);
+
+router.delete('/:id', checkAuth, deleteTradeRequest);
 
 // :id is requested book id
 // router.delete('/:id', checkAuth, deleteTradeRequest);
