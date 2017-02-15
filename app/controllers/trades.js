@@ -86,8 +86,37 @@ function delBookRequest(book) {
   })
 }
 
+function confirmTradeRequest(req, res) {
+  if (!req.user) return res.status(401).send();
+  let updBook, updOwner, updUser
+  Promise.all([
+    User.findOne({username: req.user}),
+    Book.findById(req.params.id)
+  ])
+  .then(([user, book]) => {
+    updOwner = user;
+    updBook = book;
+    return User.findById(book._requestedBy)
+  })
+  .then(user => {
+    updUser = user;
+    updBook._requestedBy = undefined;
+    const ind = updOwner.books.indexOf(req.params.id);
+    updOwner.books.splice(ind, 1);
+    updUser.books.push(req.params.id);
+    updBook._owner = updUser._id;
+    return Promise.all([updUser.save(), updBook.save(), updOwner.save()])
+  })
+  .then(() => res.send())
+  .catch(e => {
+    // console.log(e);
+    res.status(400).send()
+  })
+}
+
 module.exports = {
   getMyTradeRequests,
   createTradeRequest,
-  deleteTradeRequest
+  deleteTradeRequest,
+  confirmTradeRequest
 }

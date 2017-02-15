@@ -184,4 +184,48 @@ describe('Test /api/trades router', () => {
       .end(done);
     });
   });
+
+  describe('PUT /api/trades', () => {
+
+    it('Should confirm a trade request', (done) => {
+      app
+      .put(`/api/trades/${booksList[3]._id}`)
+      .set('x-test-user', usersList[1].username)
+      .expect(200)
+      .end(err => {
+        if (err) return done(err);
+        Promise.all([
+          User.findOne({username: usersList[0].username}).populate('books'),
+          User.findOne({username: usersList[1].username}),
+          Book.findById(booksList[3]._id)
+        ])
+        .then(([user0, user1, book]) => {
+          expect(user0.books.length).toBe(3);
+          expect(user1.books.length).toBe(1);
+          expect(book._owner).toEqual(user0._id);
+          expect(user0.books[2]._id).toEqual(booksList[3]._id);
+          expect(user0.books[2].title).toBe(booksList[3].title);
+          expect(user0.books[2].author).toBe(booksList[3].author);
+          done();
+        })
+        .catch(e => done(e));
+      });
+    });
+
+    it('Should return 401 if unauthorized', (done) => {
+      app
+      .put(`/api/trades/${booksList[3]._id}`)
+      .expect(401)
+      .end(done);
+    });
+
+    it('Should handle invalid request', (done) => {
+      app
+      .put(`/api/trades/123abc`)
+      .set('x-test-user', usersList[1].username)
+      .expect(400)
+      .end(done);
+    });
+
+  });
 });

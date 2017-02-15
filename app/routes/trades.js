@@ -3,7 +3,8 @@ const router = require('express').Router();
 const {
   getMyTradeRequests,
   createTradeRequest,
-  deleteTradeRequest
+  deleteTradeRequest,
+  confirmTradeRequest
 } = require('./../controllers/trades');
 
 let checkAuth;
@@ -24,6 +25,8 @@ router.get('/', checkAuth, getMyTradeRequests);
 router.post('/:id', checkAuth, createTradeRequest);
 
 router.delete('/:id', checkAuth, deleteTradeRequest);
+
+router.put('/:id', checkAuth, confirmTradeRequest)
 
 // :id is requested book id
 // router.delete('/:id', checkAuth, deleteTradeRequest);
