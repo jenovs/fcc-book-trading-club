@@ -6,6 +6,9 @@ const User = require('./../models/user');
 const user0Id = new ObjectID();
 const user1Id = new ObjectID();
 
+const book0Id = new ObjectID();
+const book1Id = new ObjectID();
+const book2Id = new ObjectID();
 const book3Id = new ObjectID();
 
 const usersList = [
@@ -23,17 +26,17 @@ const usersList = [
 
 const booksList = [
   {
-    _id: new ObjectID(),
+    _id: book0Id,
     author: 'Marcel Proust',
     title: 'In Search of Lost Time',
     _owner: user0Id
   }, {
-    _id: new ObjectID(),
+    _id: book1Id,
     author: 'James Joyce',
     title: 'Ulysses',
     _owner: user0Id
   }, {
-    _id: new ObjectID(),
+    _id: book2Id,
     author: 'Rollo Tomassi',
     title: 'The Rational Male',
     _owner: user1Id

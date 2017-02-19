@@ -3,6 +3,7 @@ const User = require('./../models/user');
 
 function findBooks(req, res) {
   Book.find({}, '-__v')
+  .sort('_id')
   .populate({path: '_owner', select: 'username'})
   .then(data => res.send(data))
   .catch(e => console.log(e));
