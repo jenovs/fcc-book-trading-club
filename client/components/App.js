@@ -8,59 +8,74 @@ export default class App extends React.Component {
 
     this.state = {
       books: [],
-      user: null
+      user: null,
+      myRequests: [],
+      requestedBooks: []
     }
 
     this.addBook = this.addBook.bind(this);
     this.createTradeRequest = this.createTradeRequest.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
+    this.filterMyRequests = this.filterMyRequests.bind(this);
+    this.filterRequestedBooks = this.filterRequestedBooks.bind(this);
+    this.deleteTradeRequest = this.deleteTradeRequest.bind(this);
+    this.confirmTradeRequest = this.confirmTradeRequest.bind(this);
   }
 
   componentWillMount() {
     this.getBooks();
     this.getCurrentUser();
+
   }
 
   getBooks() {
     fetch('/api/books')
     .then(res => res.json())
     .then(json => {
-      this.setState({books: json})
+      this.setState({
+        books: json
+      }, () => {
+        if (this.state.user) {
+          this.filterMyRequests();
+          this.filterRequestedBooks();
+        }
+      })
     })
     .catch(e => console.log(e));
   }
 
-  addBook(author, title) {
+  addBook(author, title, coverUrl) {
     if (author && title) {
       const newBook = {
         author,
-        title
+        title,
+        coverUrl: coverUrl || ''
       }
 
-      fetch(`/books`, {
+      fetch(`/api/books`, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-test-user': this.state.user.username
         },
         method: 'POST',
         body: JSON.stringify(newBook)
       })
       .then(res => res.json())
-      .then(json => {
-        console.log('addBook json', json);
-        this.setState({
-          books: this.state.books.concat(json[0])
-        })
+      .then(() => {
+        this.getBooks();
       })
     }
   }
 
   deleteBook(id, username) {
-    if (this.state.user && this.state.user === username) {
+    console.log('App, deleteBook');
+    const { user } = this.state
+    if (user && user.username === username) {
       console.log('deleting book', id, username);
-      fetch(`/books/${id}`, {
-        // headers: {
-        //   'Content-Type': 'application/json'
-        // },
+      fetch(`/api/books/${id}`, {
+        headers: {
+          'x-test-user': user.username
+        },
         method: 'DELETE',
         // body: JSON.stringify(newBook)
       })
@@ -85,6 +100,7 @@ export default class App extends React.Component {
       },
       method: 'POST'
     })
+    .then(() => this.getBooks())
   }
 
   // getCurrentUser() {
@@ -100,15 +116,61 @@ export default class App extends React.Component {
     })
       .then(res => res.json())
       .then(json => {
-        // console.log(json);
         this.setState({
           user: {
             username: json.username,
             _id: json._id,
             requestedBooks: json.requestedBooks
           }
+        }, () => {
+          this.filterMyRequests();
+          this.filterRequestedBooks();
         });
       })
+      .catch(e => e)
+  }
+
+  filterMyRequests() {
+    const { books, user } = this.state;
+    const myRequests = books.filter(book => book._requestedBy === user._id)
+    this.setState({
+      myRequests
+    })
+  }
+
+  filterRequestedBooks() {
+    const { books, user } = this.state;
+    const requestedBooks = books.filter(book => book._requestedBy && book._requestedBy !== user._id);
+
+    this.setState({
+      requestedBooks
+    })
+  }
+
+  deleteTradeRequest(id) {
+    console.log('deleteTradeRequest', id);
+    fetch(`/api/trades/${id}`, {
+      headers: {
+        // 'Content-Type': 'application/json',
+        'x-test-user': this.state.user.username
+      },
+      method: 'DELETE'
+    })
+    .then(() => this.getBooks())
+    .catch(e => console.log(e))
+  }
+
+  confirmTradeRequest(id) {
+    console.log('confirmTradeRequest', id);
+    fetch(`/api/trades/${id}`, {
+      headers: {
+        // 'Content-Type': 'application/json',
+        'x-test-user': this.state.user.username
+      },
+      method: 'PUT'
+    })
+    .then(() => this.getBooks())
+    .catch(e => console.log(e))
   }
 
   render() {
@@ -118,7 +180,11 @@ export default class App extends React.Component {
       user: this.state.user,
       addBook: this.addBook,
       deleteBook: this.deleteBook,
-      createTradeRequest: this.createTradeRequest
+      createTradeRequest: this.createTradeRequest,
+      myRequests: this.state.myRequests,
+      requestedBooks: this.state.requestedBooks,
+      deleteTradeRequest: this.deleteTradeRequest,
+      confirmTradeRequest: this.confirmTradeRequest
     };
     const childrenWithProps = React.Children.map(this.props.children, (child) => React.cloneElement(child, props));
     return (

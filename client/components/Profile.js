@@ -13,7 +13,7 @@ export default class Profile extends React.Component {
 
   filterBooks() {
     return this.props.books.filter(book => {
-      if (book.owner) return book.owner.username === this.props.user
+      if (book._owner) return book._owner.username === this.props.user.username
     })
   }
 
@@ -23,15 +23,17 @@ export default class Profile extends React.Component {
     console.log(this.refs.title.value);
     let author = this.refs.author.value;
     let title = this.refs.title.value;
+    let coverUrl = this.refs.coverUrl.value;
     if (author && title) {
       this.refs.author.value = '';
       this.refs.title.value = '';
-      this.props.addBook(author, title);
+      this.refs.coverUrl.value = '';
+      this.props.addBook(author, title, coverUrl);
     }
   }
 
   render() {
-    // console.log('in render', this.props);
+    // console.log('Profile, props', this.props);
     const books = this.filterBooks();
     // console.log(books);
     return (
@@ -42,13 +44,14 @@ export default class Profile extends React.Component {
               <legend>Add a book:</legend>
               <input ref='author' placeholder='author'/>{' '}
               <input ref='title' placeholder='title'/>{' '}
+              <input ref='coverUrl' placeholder='cover Url' />{' '}
               <button type='submit'>Add</button>
             </fieldset>
           </form>
         </div>
         <div>
           <p>My Books</p>
-          <Books books={books} deleteBook={this.props.deleteBook} user={this.props.user}/>
+          <Books books={books} deleteBook={this.props.deleteBook} user={this.props.user} showDelete={true}/>
         </div>
       </div>
     )

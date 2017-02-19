@@ -18,7 +18,11 @@ export default class Books extends React.Component {
           book={book}
           deleteBook={this.deleteBook.bind(this, book._id, book._owner.username)}
           createTradeRequest={this.createTradeRequest.bind(this, book._id)}
+          deleteTradeRequest={this.deleteTradeRequest.bind(this, book._id)}
+          confirmTradeRequest={this.confirmTradeRequest.bind(this, book._id)}
+          showDelete={this.props.showDelete}
           user={this.props.user}
+          requests={this.props.requests}
         />)
     });
   }
@@ -31,12 +35,21 @@ export default class Books extends React.Component {
     this.props.createTradeRequest(id);
   }
 
+  deleteTradeRequest(id) {
+    this.props.deleteTradeRequest(id);
+  }
+
+  confirmTradeRequest(id) {
+    this.props.confirmTradeRequest(id);
+  }
+
   render() {
     // console.log('Books props', this.props);
     return (
-      <div style={container}>
-        {this.parseBooks()}
-      </div>
+        <div style={container}>
+          <br />
+          {this.parseBooks()}
+        </div>
     )
   }
 }

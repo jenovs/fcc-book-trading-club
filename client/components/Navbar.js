@@ -15,7 +15,10 @@ export default class Navbar extends React.Component {
             <span> {user && user.username}</span><br/>
           </li>
           <li>
-            <Link to='/profile'>Profile</Link>
+            {user && <Link to='/requests'>Requests</Link>}
+          </li>
+          <li>
+            {user && <Link to='/profile'>My Books</Link>}
           </li>
         </ul>
       </div>

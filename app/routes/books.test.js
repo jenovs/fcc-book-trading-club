@@ -48,7 +48,8 @@ describe('Test /api/books router', () => {
   describe('POST /api/books/', () => {
     const newBook = {
       title: 'Soft Skills',
-      author: 'John Sonmez'
+      author: 'John Sonmez',
+      coverUrl: 'http://somefakeurl.com/fakeImg.png'
     }
 
     it('Should add a valid book', (done) => {
