@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
+import BtnDelete from './BtnDelete';
 import BtnRequest from './BtnRequest';
 
 export default class Book extends React.Component {
@@ -12,6 +13,7 @@ export default class Book extends React.Component {
     }
     this.handleHover = this.handleHover.bind(this);
     this.handleUnhover = this.handleUnhover.bind(this);
+    this.toggleHover = this.toggleHover.bind(this);
   }
 
   handleHover() {
@@ -25,6 +27,12 @@ export default class Book extends React.Component {
     })
   }
 
+  toggleHover() {
+    this.setState({
+      hovered: !this.state.hovered
+    })
+  }
+
   render() {
     // console.log('Book props', this.props);
     const bookClass = classNames({
@@ -35,17 +43,19 @@ export default class Book extends React.Component {
       backgroundImage: `url(${this.props.book.coverUrl})`,
       backgroundSize: 'cover'
     }
+    const { book } = this.props;
     return (
       <div
         className={bookClass}
         title={`${this.props.book.author}\n${this.props.book.title}`}
         style={cover}
         onMouseEnter={this.handleHover}
-        onMouseLeave={this.handleUnhover}>
+        onMouseLeave={this.handleUnhover}
+        onTouchStart={this.toggleHover}>
         {!this.props.book.coverUrl && this.props.book.author}<br/>
         {!this.props.book.coverUrl && this.props.book.title}
-        {/* {((this.props.user && (this.props.book._owner._id === this.props.user._id)) && this.state.hovered) && <div className='book__delete' title='Delete' onClick={this.props.deleteBook}>X</div>} */}
-        <BtnRequest {...this.props} hovered={this.state.hovered} />
+        {!book._requestedBy && <BtnRequest {...this.props} hovered={this.state.hovered} />}
+        {this.props.showDelete && <BtnDelete hovered={this.state.hovered} />}
       </div>
     )
   }
