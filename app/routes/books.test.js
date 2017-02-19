@@ -52,6 +52,7 @@ describe('Test /api/books router', () => {
     }
 
     it('Should add a valid book', (done) => {
+      // TODO add coverUrl check
       let newBookId;
       app
       .post('/api/books')

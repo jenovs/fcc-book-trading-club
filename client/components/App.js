@@ -12,6 +12,7 @@ export default class App extends React.Component {
     }
 
     this.addBook = this.addBook.bind(this);
+    this.createTradeRequest = this.createTradeRequest.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
   }
 
@@ -21,11 +22,12 @@ export default class App extends React.Component {
   }
 
   getBooks() {
-    fetch('/books')
-      .then(res => res.json())
-      .then(json => {
-        this.setState({books: json})
-      })
+    fetch('/api/books')
+    .then(res => res.json())
+    .then(json => {
+      this.setState({books: json})
+    })
+    .catch(e => console.log(e));
   }
 
   addBook(author, title) {
@@ -74,20 +76,49 @@ export default class App extends React.Component {
     }
   }
 
+  createTradeRequest(id) {
+    console.log('Requesting the book', id);
+    fetch(`/api/trades/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-test-user': this.state.user.username
+      },
+      method: 'POST'
+    })
+  }
+
+  // getCurrentUser() {
+  //   this.setState({
+  //     user: 'userOne'
+  //   })
+  // }
   getCurrentUser() {
-    fetch('/users')
+    fetch('/api/users', {
+      headers: {
+        'x-test-user': 'userOne'
+      },
+    })
       .then(res => res.json())
       .then(json => {
-        this.setState({user: json.username})
+        // console.log(json);
+        this.setState({
+          user: {
+            username: json.username,
+            _id: json._id,
+            requestedBooks: json.requestedBooks
+          }
+        });
       })
   }
 
   render() {
+    // console.log('App state', this.state);
     const props = {
       books: this.state.books,
       user: this.state.user,
       addBook: this.addBook,
-      deleteBook: this.deleteBook
+      deleteBook: this.deleteBook,
+      createTradeRequest: this.createTradeRequest
     };
     const childrenWithProps = React.Children.map(this.props.children, (child) => React.cloneElement(child, props));
     return (

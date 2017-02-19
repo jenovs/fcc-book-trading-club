@@ -19,6 +19,7 @@ function createTradeRequest(req, res) {
   let updUser, updBook;
   User.findOne({username: req.user})
   .then(user => {
+    // console.log(user);
     if (~user.requestedBooks.indexOf(req.params.id)) throw 400;
     updUser = user
   })

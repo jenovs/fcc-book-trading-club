@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Temp hack to do testing.
 // Mock the loggded in user.
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
     req.user = req.headers['x-test-user'];
     next();

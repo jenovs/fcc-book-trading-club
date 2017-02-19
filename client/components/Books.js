@@ -16,8 +16,10 @@ export default class Books extends React.Component {
         <Book
           key={i}
           book={book}
-          deleteBook={this.deleteBook.bind(this, book._id, book.owner.username)}
-          deleteButton={this.props.user}/>)
+          deleteBook={this.deleteBook.bind(this, book._id, book._owner.username)}
+          createTradeRequest={this.createTradeRequest.bind(this, book._id)}
+          user={this.props.user}
+        />)
     });
   }
 
@@ -25,7 +27,12 @@ export default class Books extends React.Component {
     this.props.deleteBook && this.props.deleteBook(id, username);
   }
 
+  createTradeRequest(id) {
+    this.props.createTradeRequest(id);
+  }
+
   render() {
+    // console.log('Books props', this.props);
     return (
       <div style={container}>
         {this.parseBooks()}

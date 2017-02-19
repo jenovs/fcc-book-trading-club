@@ -16,6 +16,7 @@ function addBook(req, res) {
       const newBook = new Book({
         title: req.body.title,
         author: req.body.author,
+        coverUrl: req.body.coverUrl,
         _owner: user
       });
       user.books.push(newBook)

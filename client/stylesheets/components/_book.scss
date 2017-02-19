@@ -1,10 +1,12 @@
+@import './../base/colors';
+
 .book {
   border: 1px solid gray;
   height: 10rem;
   margin: 1rem;
   min-width: 7rem;
   position: relative;
-  transition: all 0.3s;
+  transition: transform 0.2s;
   width: 7rem;
 }
 
@@ -21,12 +23,40 @@
   transition: all 0.1s;
 
   &:hover {
-    transform: scale(1.1);
+    background-color: red;
     border: 1px solid gray;
     box-shadow: 1px 1px 2px black;
+    color: white;
   }
 }
 
 .book--hovered {
-  transform: scale(1.2);
+  filter: blur(0px);
+  transform: scale(1.05);
+}
+
+.book__btnRequest {
+  background-color: white;
+  border: 1px solid transparent;
+  color: $cornflower-blue;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: default;
+  padding: 5px;
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  transition: all 0.1s;
+
+  &:hover {
+    background-color: $cornflower-blue;
+    border: 1px solid gray;
+    // box-shadow: 1px 1px 2px black;
+    color: white;
+  }
+  &:active {
+    background-color: darken($cornflower-blue, 10%);
+    // box-shadow: none;
+    // transform: translateY(1px);
+  }
 }

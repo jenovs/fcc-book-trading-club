@@ -6,6 +6,7 @@ mongoose.Promise = global.Promise;
 const BookSchema = new Schema({
   title: String,
   author: String,
+  coverUrl: String,
   _owner: {
     type: Schema.Types.ObjectId,
     ref: 'user',

@@ -4,7 +4,7 @@ const { addBook, deleteBook, findBooks, requestBookTrade } = require('./../contr
 
 let checkAuth;
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
   checkAuth = (req, res, next) => {
     next();
   }
@@ -14,18 +14,11 @@ if (process.env.NODE_ENV === 'test') {
     if (!req.user) return res.status(401).send();
   }
 }
-// // Mock the loggded in user 'userOne'.
-// router.use((req, res, next) => {
-//   req.user = 'userOne';
-//   next();
-// });
 
 // Get an array of all books
 router.get('/', findBooks);
 
 router.post('/', checkAuth, addBook);
-
-// router.put('/:id', checkAuth, requestBookTrade)
 
 router.delete('/:id', checkAuth, deleteBook);
 

@@ -10,6 +10,8 @@
     "start": "export NODE_ENV=production && node app/server.js",
     "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js",
     "webpack": "webpack -w",
+    "cover": "nyc npm test",
+    "postcover": "rm -rf .nyc_output",
     "dev": "export NODE_ENV=development && nodemon app/server.js"
   },
   "keywords": [],
@@ -36,6 +38,7 @@
     "node-fetch": "^1.6.3",
     "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
+    "nyc": "^10.1.2",
     "react-addons-test-utils": "^15.4.2",
     "sass-loader": "^5.0.0",
     "style-loader": "^0.13.1",
