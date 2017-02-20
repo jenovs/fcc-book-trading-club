@@ -164,7 +164,9 @@ export default class App extends React.Component {
 
   filterRequestedBooks() {
     const { books, user } = this.state;
-    const requestedBooks = books.filter(book => book._requestedBy && book._requestedBy !== user._id);
+    const requestedBooks = books.filter(book => {
+      return book._requestedBy && book._requestedBy !== user._id && book._owner === user._id
+    });
 
     this.setState({
       requestedBooks
