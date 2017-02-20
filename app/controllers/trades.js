@@ -1,5 +1,6 @@
 const Book = require('./../models/book');
 const User = require('./../models/user');
+const { emitUpdate } = require('./helpers')
 
 function getMyTradeRequests(req, res) {
   if (!req.user) return res.status(401).send();
@@ -20,12 +21,12 @@ function createTradeRequest(req, res) {
   User.findOne({username: req.user})
   .then(user => {
     // console.log(user);
-    if (~user.requestedBooks.indexOf(req.params.id)) throw 400;
+    if (~user.requestedBooks.indexOf(req.params.id)) throw 'Already requested';
     updUser = user
   })
   .then(() => Book.findById(req.params.id))
   .then(book => {
-    if (!book || book._requestedBy || book._owner.equals(updUser._id)) throw 400;
+    if (!book || book._requestedBy || book._owner.equals(updUser._id)) throw 'Bad request';
     updBook = book;
   })
   .then(() => {
@@ -33,7 +34,10 @@ function createTradeRequest(req, res) {
     updBook._requestedBy = updUser._id;
     return Promise.all([updUser.save(), updBook.save()]);
   })
-  .then(() => res.send())
+  .then(() => {
+    res.send()
+    emitUpdate(req);
+  })
   .catch(e => {
     // console.log(e);
     res.status(400).send();
@@ -62,6 +66,7 @@ function deleteTradeRequest(req, res) {
   })
   .then(() => {
     res.send();
+    emitUpdate(req);
   })
   .catch(e => {
     // console.log(e);
@@ -108,7 +113,10 @@ function confirmTradeRequest(req, res) {
     updBook._owner = updUser._id;
     return Promise.all([updUser.save(), updBook.save(), updOwner.save()])
   })
-  .then(() => res.send())
+  .then(() => {
+    res.send();
+    emitUpdate(req);
+  })
   .catch(e => {
     // console.log(e);
     res.status(400).send()

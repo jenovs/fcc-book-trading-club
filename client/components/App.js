@@ -1,4 +1,7 @@
 import React from 'react';
+import io from 'socket.io-client';
+
+const socket = io();
 
 import Navbar from './Navbar';
 
@@ -26,6 +29,14 @@ export default class App extends React.Component {
   componentWillMount() {
     this.getBooks();
     this.getCurrentUser();
+  }
+
+  componentDidMount() {
+    // socket.on('update', this.getBooks());
+    socket.on('update', () => {
+      console.log('Socket emit received');
+      this.getBooks();
+    })
   }
 
   getBooks() {

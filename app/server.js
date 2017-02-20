@@ -26,17 +26,23 @@ const {
   TW_CALLBACK_URL,
 } = process.env;
 
-passport.use(new TwitterStrategy({
-  consumerKey: TW_API_KEY,
-  consumerSecret: TW_API_SECRET,
-  callbackURL: TW_CALLBACK_URL
-},
+if (process.env.NODE_ENV !== 'test') {
+  passport.use(new TwitterStrategy({
+    consumerKey: TW_API_KEY,
+    consumerSecret: TW_API_SECRET,
+    callbackURL: TW_CALLBACK_URL
+  },
   function(token, tokenSecret, profile, done) {
     done(null, profile.username);
   }
 ));
+}
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+app.set('socketio', io);
+
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -65,7 +71,7 @@ app.get('/auth/twitter', passport.authenticate('twitter'));
 app.get('/auth/twitter/callback',
   passport.authenticate('twitter', {failureRedirect: '/fail'}),
   (req, res, next) => {
-    console.log(req.user);
+    // console.log(req.user);
     User.findOne({username: req.user})
     .then(user => {
       if(!user) {
@@ -88,7 +94,7 @@ app.get('/auth/logout', (req, res) => {
 
 // Temp hack to do testing.
 // Mock the loggded in user.
-if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === '_development') {
+if (process.env.NODE_ENV === 'test') {
   app.use((req, res, next) => {
     req.user = req.headers['x-test-user'];
     next();
@@ -99,13 +105,19 @@ app.use('/api/books', books);
 app.use('/api/users', users);
 app.use('/api/trades', trades);
 
+// io.on('connection', () => {
+//   console.log('user connected');
+// })
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server started on port ${PORT}...`);
 });
 
-module.exports = app;
+module.exports = {
+  app,
+  io
+};
