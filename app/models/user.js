@@ -15,7 +15,10 @@ const UserSchema = new Schema({
   requestedBooks: [{
     type: Schema.Types.ObjectId,
     ref: 'book'
-  }]
+  }],
+  fullName: String,
+  city: String,
+  state: String
 });
 
 module.exports = mongoose.model('user', UserSchema);

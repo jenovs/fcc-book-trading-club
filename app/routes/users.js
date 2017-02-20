@@ -1,15 +1,17 @@
 const router = require('express').Router();
 
-const { getUser } = require('./../controllers/users');
+const { getUser, updateUser } = require('./../controllers/users');
 const Book = require('./../models/book');
 const User = require('./../models/user');
 
 const checkAuth = (req, res, next) => {
-  
+
   next();
 }
 
-router.get('/', checkAuth, getUser)
+router.get('/', checkAuth, getUser);
+
+router.put('/', checkAuth, updateUser);
 
 // Temp route to create test user
 router.post('/', (req, res) => {
