@@ -20,12 +20,12 @@ export default class App extends React.Component {
     this.filterRequestedBooks = this.filterRequestedBooks.bind(this);
     this.deleteTradeRequest = this.deleteTradeRequest.bind(this);
     this.confirmTradeRequest = this.confirmTradeRequest.bind(this);
+    this.updateUser = this.updateUser.bind(this);
   }
 
   componentWillMount() {
     this.getBooks();
     this.getCurrentUser();
-
   }
 
   getBooks() {
@@ -120,7 +120,10 @@ export default class App extends React.Component {
           user: {
             username: json.username,
             _id: json._id,
-            requestedBooks: json.requestedBooks
+            requestedBooks: json.requestedBooks,
+            fullName: json.fullName,
+            city: json.city,
+            state: json.state
           }
         }, () => {
           this.filterMyRequests();
@@ -128,6 +131,22 @@ export default class App extends React.Component {
         });
       })
       .catch(e => e)
+  }
+
+  updateUser(data) {
+    console.log('updateUser', data);
+    fetch(`/api/users/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-test-user': this.state.user.username
+      },
+      method: 'PUT',
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      this.getCurrentUser();
+    })
+    .catch(e => console.log(e));
   }
 
   filterMyRequests() {
@@ -184,7 +203,8 @@ export default class App extends React.Component {
       myRequests: this.state.myRequests,
       requestedBooks: this.state.requestedBooks,
       deleteTradeRequest: this.deleteTradeRequest,
-      confirmTradeRequest: this.confirmTradeRequest
+      confirmTradeRequest: this.confirmTradeRequest,
+      updateUser: this.updateUser
     };
     const childrenWithProps = React.Children.map(this.props.children, (child) => React.cloneElement(child, props));
     return (
