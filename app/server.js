@@ -5,8 +5,9 @@ console.log('Process:', process.env.NODE_ENV);
 const express = require('express');
 const path = require('path');
 const fetch = require('node-fetch');
-// const passport = require('passport');
-// const session = require('express-session');
+const passport = require('passport');
+const TwitterStrategy = require('passport-twitter');
+const session = require('express-session');
 const mongoose = require('./mongoose');
 const bodyParser = require('body-parser');
 const books = require('./routes/books');
@@ -19,59 +20,80 @@ const User = require('./models/user');
 const { usersList } = require('./seed/seed');
 
 const {
-  PORT
+  PORT,
+  TW_API_KEY,
+  TW_API_SECRET,
+  TW_CALLBACK_URL,
 } = process.env;
+
+passport.use(new TwitterStrategy({
+  consumerKey: TW_API_KEY,
+  consumerSecret: TW_API_SECRET,
+  callbackURL: TW_CALLBACK_URL
+},
+  function(token, tokenSecret, profile, done) {
+    done(null, profile.username);
+  }
+));
 
 const app = express();
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use(session({
-//   secret: '',
-//   resave: true,
-//   saveUninitialized: true
-// }));
+app.use(session({
+  secret: 'supersecret',
+  resave: true,
+  saveUninitialized: true
+}));
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
-// passport.serializeUser(function(user, done) {
-//   done(null, user);
-// });
-//
-// passport.deserializeUser(function(user, done) {
-//   done(null, user);
-// });
+passport.serializeUser(function(user, done) {
+  // console.log('serializeUser', user);
+  done(null, user);
+});
 
-// app.get('/auth/twitter', passport.authenticate('twitter'));
-//
-// app.get('/auth/twitter/callback',
-//   passport.authenticate('twitter', {failureRedirect: '/fail'}),
-//   (req, res, next) => {
-//     res.redirect('/');
-//   }
-// );
-//
-// app.get('/auth/logout', (req, res) => {
-//   req.logout();
-//   res.redirect('/')
-// });
+passport.deserializeUser(function(user, done) {
+  // console.log('deserializeUser', user);
+  done(null, user);
+});
+
+app.get('/auth/twitter', passport.authenticate('twitter'));
+
+app.get('/auth/twitter/callback',
+  passport.authenticate('twitter', {failureRedirect: '/fail'}),
+  (req, res, next) => {
+    console.log(req.user);
+    User.findOne({username: req.user})
+    .then(user => {
+      if(!user) {
+        const newUser = new User({
+          username: req.user
+        })
+        return newUser.save();
+      }
+    })
+    .then(() => {
+      res.redirect('/');
+    })
+  }
+);
+
+app.get('/auth/logout', (req, res) => {
+  req.logout();
+  res.redirect('/')
+});
 
 // Temp hack to do testing.
 // Mock the loggded in user.
-if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === '_development') {
   app.use((req, res, next) => {
     req.user = req.headers['x-test-user'];
     next();
   });
 }
-
-// Mock the loggded in user 'userTwo'.
-// app.use((req, res, next) => {
-//   req.user = 'userTwo';
-//   next();
-// });
 
 app.use('/api/books', books);
 app.use('/api/users', users);

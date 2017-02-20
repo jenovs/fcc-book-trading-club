@@ -5,7 +5,7 @@ const Book = require('./../models/book');
 const User = require('./../models/user');
 
 const checkAuth = (req, res, next) => {
-
+  console.log('users, checkAuth', req.user);
   next();
 }
 

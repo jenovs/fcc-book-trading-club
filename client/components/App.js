@@ -53,6 +53,7 @@ export default class App extends React.Component {
       }
 
       fetch(`/api/books`, {
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'x-test-user': this.state.user.username
@@ -73,6 +74,7 @@ export default class App extends React.Component {
     if (user && user.username === username) {
       console.log('deleting book', id, username);
       fetch(`/api/books/${id}`, {
+        credentials: 'include',
         headers: {
           'x-test-user': user.username
         },
@@ -94,6 +96,7 @@ export default class App extends React.Component {
   createTradeRequest(id) {
     console.log('Requesting the book', id);
     fetch(`/api/trades/${id}`, {
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'x-test-user': this.state.user.username
@@ -110,9 +113,10 @@ export default class App extends React.Component {
   // }
   getCurrentUser() {
     fetch('/api/users', {
+      credentials: 'include',
       headers: {
-        'x-test-user': 'userOne'
-      },
+        'x-test-user': 'userOne',
+      }
     })
       .then(res => res.json())
       .then(json => {
@@ -136,6 +140,7 @@ export default class App extends React.Component {
   updateUser(data) {
     console.log('updateUser', data);
     fetch(`/api/users/`, {
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'x-test-user': this.state.user.username
@@ -169,6 +174,7 @@ export default class App extends React.Component {
   deleteTradeRequest(id) {
     console.log('deleteTradeRequest', id);
     fetch(`/api/trades/${id}`, {
+      credentials: 'include',
       headers: {
         // 'Content-Type': 'application/json',
         'x-test-user': this.state.user.username
@@ -182,6 +188,7 @@ export default class App extends React.Component {
   confirmTradeRequest(id) {
     console.log('confirmTradeRequest', id);
     fetch(`/api/trades/${id}`, {
+      credentials: 'include',
       headers: {
         // 'Content-Type': 'application/json',
         'x-test-user': this.state.user.username
