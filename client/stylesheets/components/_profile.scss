@@ -1,10 +1,32 @@
 .profile__form-add {
-  display: flex;
-  flex-wrap: wrap;
+
+  // flex-wrap: wrap;
   max-width: 30rem;
 
   & > fieldset {
     border-color: cornflowerblue;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+
+    & > div {
+      background-color: lightgray;
+      align-items: center;
+      display: flex;
+      height: 2rem;
+      justify-content: space-between;
+      margin: 1rem;
+      padding: 0 1rem;
+      // width: 20rem;
+
+      &:last-child {
+        background-color: inherit;
+      }
+
+      & > input {
+        width: 15rem;
+      }
+    }
   }
+
 }

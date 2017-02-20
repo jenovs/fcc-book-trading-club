@@ -4,24 +4,24 @@ import { Link } from 'react-router';
 export default class Navbar extends React.Component {
   render() {
     // console.log('Navbar props', this.props);
-    const { user } = this.props;
+    const { user, totalRequests } = this.props;
     return (
       <div>
         <ul className="navbar">
           <li>
-            <Link to='/'>Home</Link>
+            {user && <Link to='/'>All Books</Link>}
           </li>
           <li>
-            <span> {user && user.username}</span><br/>
+            {!user && <a href="/auth/twitter">Login to request a trade</a>}
           </li>
           <li>
-            {user && <Link to='/requests'>Requests</Link>}
+            {user && <Link to='/requests'>Requests ({totalRequests})</Link>}
           </li>
           <li>
             {user && <Link to='/profile'>My Books</Link>}
           </li>
           <li>
-            {user && <Link to='/settings'>Settings</Link>}
+            {user && <Link to='/settings'>{user.username}</Link>}
           </li>
         </ul>
       </div>

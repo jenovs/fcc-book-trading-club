@@ -164,9 +164,12 @@ export default class App extends React.Component {
 
   filterRequestedBooks() {
     const { books, user } = this.state;
+    console.log('filterRequestedBooks', user);
+    console.log('filterRequestedBooks', books);
     const requestedBooks = books.filter(book => {
-      return book._requestedBy && book._requestedBy !== user._id && book._owner === user._id
+      return book._requestedBy && book._requestedBy !== user._id && book._owner._id === user._id
     });
+    console.log('requestedBooks', requestedBooks);
 
     this.setState({
       requestedBooks
@@ -218,7 +221,9 @@ export default class App extends React.Component {
     const childrenWithProps = React.Children.map(this.props.children, (child) => React.cloneElement(child, props));
     return (
       <div>
-        <Navbar user={this.state.user} />
+        <Navbar
+          user={this.state.user}
+          totalRequests={this.state.requestedBooks.length + this.state.myRequests.length} />
         {childrenWithProps}
       </div>
     )

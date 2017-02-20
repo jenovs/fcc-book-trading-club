@@ -12,7 +12,7 @@ export default class Requests extends React.Component {
   }
 
   render() {
-    // console.log('Requests, props', this.props);
+    console.log('Requests, props', this.props);
     return (
       <div>
         <div>Requests</div>

@@ -3,6 +3,7 @@
   background-color: cornflowerblue;
   color: white;
   display: flex;
+  // flex: 0 0 auto;
   // flex-wrap: wrap;
   font-weight: bold;
   height: 3rem;
@@ -12,7 +13,12 @@
   margin-bottom: 1rem;
 
   & > li {
-    margin-right: 2rem;
+    margin-right: 0.5rem;
+  }
+  @media (min-width: 400px) {
+    & > li {
+      margin-right: 2rem;
+    }
   }
 
   & > li:first-child {
