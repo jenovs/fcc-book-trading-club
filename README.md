@@ -1,4 +1,6 @@
-## Book Trading Club.
+## Book Trading Club App
+
+#### Live link: https://book-club.jenovs.com/
 
 Full stack project for FreeCodeCamp  
 https://www.freecodecamp.com/challenges/manage-a-book-trading-club
