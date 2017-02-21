@@ -23,6 +23,9 @@ export default class Navbar extends React.Component {
           <li>
             {user && <Link to='/settings'>{user.username}</Link>}
           </li>
+          <li>
+            {user && <a href="/auth/logout">Logout</a>}
+          </li>
         </ul>
       </div>
     )
