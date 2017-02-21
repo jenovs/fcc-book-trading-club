@@ -20,7 +20,6 @@ function createTradeRequest(req, res) {
   let updUser, updBook;
   User.findOne({username: req.user})
   .then(user => {
-    // console.log(user);
     if (~user.requestedBooks.indexOf(req.params.id)) throw 'Already requested';
     updUser = user
   })
@@ -39,7 +38,6 @@ function createTradeRequest(req, res) {
     emitUpdate(req);
   })
   .catch(e => {
-    // console.log(e);
     res.status(400).send();
   })
 }

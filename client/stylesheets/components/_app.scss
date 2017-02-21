@@ -6,9 +6,6 @@
 
 .app__content {
   flex: 1;
+  margin: auto;
   max-width: 1300px;
-
-  @media (min-width: 430px) {
-    margin-left: 10rem;
-  }
 }
