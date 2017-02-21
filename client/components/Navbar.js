@@ -6,7 +6,7 @@ export default class Navbar extends React.Component {
     // console.log('Navbar props', this.props);
     const { user, totalRequests } = this.props;
     return (
-      <div>
+      <div className="navbar__container">
         <ul className="navbar">
           <li>
             {user && <Link to='/'>All Books</Link>}
@@ -24,7 +24,7 @@ export default class Navbar extends React.Component {
             {user && <Link to='/settings'>{user.username}</Link>}
           </li>
           <li>
-            {user && <a href="/auth/logout">Logout</a>}
+            {user && <a href="/auth/logout"><i className="fa fa-power-off"/></a>}
           </li>
         </ul>
       </div>

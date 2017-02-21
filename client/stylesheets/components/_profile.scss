@@ -4,14 +4,15 @@
   max-width: 30rem;
 
   & > fieldset {
-    border-color: cornflowerblue;
+    border-color: $base-color;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
 
     & > div {
-      background-color: lightgray;
       align-items: center;
+      background-color: $base-color;
+      border-radius: 5px;
       display: flex;
       height: 2rem;
       justify-content: space-between;
@@ -24,6 +25,8 @@
       }
 
       & > input {
+        font-size: 1em;
+        padding-left: 0.5em;
         width: 15rem;
       }
     }

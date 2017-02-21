@@ -203,13 +203,8 @@ export default class App extends React.Component {
   }
 
   confirmTradeRequest(id) {
-    console.log('confirmTradeRequest', id);
     fetch(`/api/trades/${id}`, {
       credentials: 'include',
-      headers: {
-        // 'Content-Type': 'application/json',
-        'x-test-user': this.state.user.username
-      },
       method: 'PUT'
     })
     .then(() => this.getBooks())

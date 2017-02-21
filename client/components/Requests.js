@@ -15,7 +15,7 @@ export default class Requests extends React.Component {
     console.log('Requests, props', this.props);
     return (
       <div>
-        <div>Requests</div>
+        <div className="requests__title">Requests</div>
         My requests: {this.props.myRequests.length}
         <Books
           books={this.props.myRequests}

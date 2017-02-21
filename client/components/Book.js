@@ -19,7 +19,7 @@ export default class Book extends React.Component {
       <div className="book__container">
         <div
           className="book__cover"
-          title={`${this.props.book.author}\n${this.props.book.title}`}
+          title={`${this.props.book.title}\nby ${this.props.book.author}`}
           style={cover}
         >
           {!this.props.book.coverUrl && this.props.book.author}<br/>
