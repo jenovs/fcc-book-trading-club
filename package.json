@@ -6,7 +6,6 @@
   "main": "app/server.js",
   "scripts": {
     "test": "NODE_ENV=test mocha app/**/*.test.js -R min",
-    "test:react": "NODE_ENV=test mocha helpers/browser.js client/**/*.test.js || true",
     "start": "export NODE_ENV=production && node app/server.js",
     "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js",
     "webpack": "webpack -w",
@@ -18,7 +17,6 @@
   "author": "Viktors Jenovs",
   "license": "ISC",
   "devDependencies": {
-    "@google/maps": "^0.3.1",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-preset-airbnb": "^2.2.3",
