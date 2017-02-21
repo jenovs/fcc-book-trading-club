@@ -11,7 +11,8 @@ if (process.env.NODE_ENV === 'test') {
 } else {
   checkAuth = (req, res, next) => {
     console.log('checking auth...', req.user);
-    if (!req.user) return res.status(401).send();
+    // if (!req.user) return res.status(401).send();
+    if (!req.user) return res.redirect('/');
     next();
   }
 }
