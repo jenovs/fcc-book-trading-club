@@ -203,6 +203,7 @@ describe('Test /api/trades router', () => {
           expect(user0.books.length).toBe(3);
           expect(user1.books.length).toBe(1);
           expect(book._owner).toEqual(user0._id);
+          expect(user0.requestedBooks.length).toBe(0);
           expect(user0.books[2]._id).toEqual(booksList[3]._id);
           expect(user0.books[2].title).toBe(booksList[3].title);
           expect(user0.books[2].author).toBe(booksList[3].author);

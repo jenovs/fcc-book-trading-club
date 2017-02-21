@@ -108,7 +108,9 @@ function confirmTradeRequest(req, res) {
     updUser = user;
     updBook._requestedBy = undefined;
     const ind = updOwner.books.indexOf(req.params.id);
+    const indReq = updUser.requestedBooks.indexOf(req.params.id);
     updOwner.books.splice(ind, 1);
+    updUser.requestedBooks.splice(indReq, 1);
     updUser.books.push(req.params.id);
     updBook._owner = updUser._id;
     return Promise.all([updUser.save(), updBook.save(), updOwner.save()])
