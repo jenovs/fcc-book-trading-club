@@ -1,7 +1,7 @@
 .navbar {
   align-items: center;
-  background-color: cornflowerblue;
-  color: white;
+  background-color: $base-color;
+  color: $base-font-color;
   display: flex;
   // flex: 0 0 auto;
   // flex-wrap: wrap;

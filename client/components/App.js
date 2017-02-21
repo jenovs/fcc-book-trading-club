@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 const socket = io();
 
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -231,11 +232,14 @@ export default class App extends React.Component {
     };
     const childrenWithProps = React.Children.map(this.props.children, (child) => React.cloneElement(child, props));
     return (
-      <div>
+      <div className="app__container">
         <Navbar
           user={this.state.user}
           totalRequests={this.state.requestedBooks.length + this.state.myRequests.length} />
-        {childrenWithProps}
+        <div className="app__content">
+          {childrenWithProps}
+        </div>
+        <Footer />
       </div>
     )
   }
