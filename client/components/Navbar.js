@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 
 export default class Navbar extends React.Component {
   render() {
-    // console.log('Navbar props', this.props);
     const { user, totalRequests } = this.props;
     return (
       <div className="navbar__container">

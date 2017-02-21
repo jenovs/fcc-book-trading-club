@@ -33,9 +33,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    // socket.on('update', this.getBooks());
     socket.on('update', () => {
-      console.log('Socket emit received');
       this.getBooks();
     })
   }
@@ -67,8 +65,7 @@ export default class App extends React.Component {
       fetch(`/api/books`, {
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          'x-test-user': this.state.user.username
+          'Content-Type': 'application/json'
         },
         method: 'POST',
         body: JSON.stringify(newBook)
@@ -81,81 +78,63 @@ export default class App extends React.Component {
   }
 
   deleteBook(id, username) {
-    console.log('App, deleteBook');
     const { user } = this.state
     if (user && user.username === username) {
-      console.log('deleting book', id, username);
       fetch(`/api/books/${id}`, {
         credentials: 'include',
-        headers: {
-          'x-test-user': user.username
-        },
         method: 'DELETE',
-        // body: JSON.stringify(newBook)
       })
-        .then(res => res.json())
-        .then(json => {
-          const bookInd = this.state.books.findIndex(book => book._id === json._id)
-          const books = [...this.state.books]
-          books.splice(bookInd, 1)
-          this.setState({
-            books
-          })
+      .then(res => res.json())
+      .then(json => {
+        const bookInd = this.state.books.findIndex(book => book._id === json._id)
+        const books = [...this.state.books]
+        books.splice(bookInd, 1)
+        this.setState({
+          books
         })
+      })
     }
   }
 
   createTradeRequest(id) {
-    console.log('Requesting the book', id);
     fetch(`/api/trades/${id}`, {
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
-        'x-test-user': this.state.user.username
+        'Content-Type': 'application/json'
       },
       method: 'POST'
     })
     .then(() => this.getBooks())
   }
 
-  // getCurrentUser() {
-  //   this.setState({
-  //     user: 'userOne'
-  //   })
-  // }
   getCurrentUser() {
     fetch('/api/users', {
-      credentials: 'include',
-      headers: {
-        'x-test-user': 'userOne',
-      }
+      credentials: 'include'
     })
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          user: {
-            username: json.username,
-            _id: json._id,
-            requestedBooks: json.requestedBooks,
-            fullName: json.fullName,
-            city: json.city,
-            state: json.state
-          }
-        }, () => {
-          this.filterMyRequests();
-          this.filterRequestedBooks();
-        });
-      })
-      .catch(e => e)
+    .then(res => res.json())
+    .then(json => {
+      this.setState({
+        user: {
+          username: json.username,
+          _id: json._id,
+          requestedBooks: json.requestedBooks,
+          fullName: json.fullName,
+          city: json.city,
+          state: json.state
+        }
+      }, () => {
+        this.filterMyRequests();
+        this.filterRequestedBooks();
+      });
+    })
+    .catch(e => e)
   }
 
   updateUser(data) {
-    console.log('updateUser', data);
     fetch(`/api/users/`, {
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
-        'x-test-user': this.state.user.username
+        'Content-Type': 'application/json'
       },
       method: 'PUT',
       body: JSON.stringify(data)
@@ -176,12 +155,9 @@ export default class App extends React.Component {
 
   filterRequestedBooks() {
     const { books, user } = this.state;
-    console.log('filterRequestedBooks', user);
-    console.log('filterRequestedBooks', books);
     const requestedBooks = books.filter(book => {
       return book._requestedBy && book._requestedBy !== user._id && book._owner._id === user._id
     });
-    console.log('requestedBooks', requestedBooks);
 
     this.setState({
       requestedBooks
@@ -189,13 +165,8 @@ export default class App extends React.Component {
   }
 
   deleteTradeRequest(id) {
-    console.log('deleteTradeRequest', id);
     fetch(`/api/trades/${id}`, {
       credentials: 'include',
-      headers: {
-        // 'Content-Type': 'application/json',
-        'x-test-user': this.state.user.username
-      },
       method: 'DELETE'
     })
     .then(() => this.getBooks())
@@ -212,7 +183,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    // console.log('App state', this.state);
     const props = {
       books: this.state.books,
       user: this.state.user,

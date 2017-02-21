@@ -4,7 +4,6 @@
   display: flex;
   margin: 0;
   padding: 0;
-  // width: 9rem;
 }
 
 .book__cover {
@@ -15,7 +14,6 @@
   width: 7rem;
   position: relative;
   transition: transform 0.2s;
-  // width: 7rem;
 
   &:hover {
     border: 1px solid $cornflower-blue;
@@ -45,8 +43,6 @@
 }
 
 .book--hovered {
-  // filter: blur(0px);
-  // transform: scale(1.05);
   border: 1px solid $cornflower-blue;
   box-shadow: 0px 0px 5px 2px $cornflower-blue;
 }
@@ -68,13 +64,10 @@
   &:hover {
     background-color: $cornflower-blue;
     border: 1px solid gray;
-    // box-shadow: 1px 1px 2px black;
     color: white;
   }
   &:active {
     background-color: darken($cornflower-blue, 10%);
-    // box-shadow: none;
-    // transform: translateY(1px);
   }
 }
 

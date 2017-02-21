@@ -47,7 +47,6 @@ export default class Settings extends React.Component {
   }
 
   render() {
-    // console.log('Settings, state', this.state);
     return (
       this.state && (
         <div className="settings__container">

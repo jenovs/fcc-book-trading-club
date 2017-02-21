@@ -8,8 +8,6 @@
   background-color: $base-color;
   color: $base-font-color;
   display: flex;
-  // flex: 0 0 auto;
-  // flex-wrap: wrap;
   font-weight: bold;
   height: 3rem;
   justify-content: flex-end;
@@ -29,8 +27,4 @@
   & > li:first-child {
     margin-right: auto;
   }
-}
-
-.navbar__logout {
-  font-family: sans-serif;
 }

@@ -20,8 +20,6 @@ export default class Profile extends React.Component {
 
   addBook(e) {
     e.nativeEvent.preventDefault();
-    console.log(this.refs.author.value);
-    console.log(this.refs.title.value);
     let author = this.refs.author.value;
     let title = this.refs.title.value;
     let coverUrl = this.refs.coverUrl.value;
@@ -34,9 +32,7 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    // console.log('Profile, props', this.props);
     const books = this.filterBooks();
-    // console.log(books);
     return (
       <div>
         <div>

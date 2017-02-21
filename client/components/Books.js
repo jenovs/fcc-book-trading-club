@@ -2,12 +2,6 @@ import React from 'react';
 
 import Book from './Book';
 
-const container = {
-  display: 'flex',
-  flexWrap: 'wrap'
-  // flex: '0 1 33%'
-}
-
 export default class Books extends React.Component {
 
   parseBooks() {
@@ -44,9 +38,8 @@ export default class Books extends React.Component {
   }
 
   render() {
-    // console.log('Books props', this.props);
     return (
-        <div style={container}>
+        <div className="books__container">
           <br />
           {this.parseBooks()}
         </div>

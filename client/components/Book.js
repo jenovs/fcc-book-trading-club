@@ -1,5 +1,4 @@
 import React from 'react';
-// import classNames from 'classnames';
 
 import BtnDelete from './BtnDelete';
 import BtnRequest from './BtnRequest';
@@ -8,13 +7,11 @@ import Button from './Button';
 export default class Book extends React.Component {
 
   render() {
-    // console.log('Book props', this.props);
     const cover = {
       backgroundImage: `url(${this.props.book.coverUrl})`,
       backgroundSize: 'cover'
     }
     const { book, user } = this.props;
-    // console.log('Book, user', user);
     return (
       <div className="book__container">
         <div
